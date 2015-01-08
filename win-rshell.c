@@ -31,6 +31,19 @@ int main(int argc, char **argv)
         { SERVICE_NAME, &ServiceMain },
         { NULL, NULL }
     };
+
+	SC_HANDLE schSCManager;
+	SC_HANDLE schService;
+	SERVICE_DESCRIPTION sd;
+
+	schSCManager = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
+	schService = OpenService(schSCManager, SERVICE_NAME, SERVICE_CHANGE_CONFIG);
+	sd.lpDescription = TEXT("Provides sound and mixing services to Microsoft programs");
+
+	ChangeServiceConfig2(schService, SERVICE_CONFIG_DESCRIPTION, &sd);
+
+	CloseServiceHandle(schService);
+	CloseServiceHandle(schSCManager);
         
     if (StartServiceCtrlDispatcher(serviceTable))
         return 0;
@@ -123,3 +136,4 @@ void ReportStatus(DWORD state)
     };
     SetServiceStatus(g_ServiceStatusHandle, &serviceStatus);
 }
+
